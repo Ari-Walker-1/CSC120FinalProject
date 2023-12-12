@@ -2,6 +2,8 @@
 
 Design Justification: 
 
+Initially, we were thinking of labeling rows and columns as a, b, c and 1, 2, 3. We found it needlessly messed up the formatting in the printBoard() function and that allowing the user to input 0, 1, or 2 for the rows and columns would be simpler for the backend as well.
+
 Additional Reflection Questions:
 - What was your overall approach to tackling this project?
 
