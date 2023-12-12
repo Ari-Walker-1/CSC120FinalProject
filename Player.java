@@ -2,58 +2,53 @@ import java.util.Scanner;
 
 public class Player {
 
-    public String name;
-    public char letter;
-    public int gamesWon;
-    public int gamesTied;
-    public boolean turn;
+  public String name;
+  public char letter;
+  public int gamesWon;
+  public int gamesTied;
+  public boolean turn;
 
-    public Player(String name, char letter) {
-        this.name = name;
-        this.letter = letter;
-        gamesWon = 0;
-        gamesTied = 0;
-        turn = false;
+  /**
+   * Player Constructor
+   * @param name
+   * @param letter
+   */
+  public Player(String name, char letter) {
+    this.name = name;
+    this.letter = letter;
+    gamesWon = 0;
+    gamesTied = 0;
+    turn = false;
+  }
+
+  /**
+   * Switches which turn the player is going (called in TicTacToeGame after each game)
+   */
+  public void switchTurn() {
+    if (turn) {
+      turn = false;
+    } else {
+      turn = true;
     }
+  }
 
-    public void updateScore() {
-        ///if X wins (update the score of the player playing X)
-        //if O wins (update the score of the player playing O)
+  /**
+   * Switches the letter that the player is playing as (called in TicTacToeGame after each game)
+   */
+  public void switchLetter() {
+    if (letter == 'X') {
+      letter = 'O';
+    } else {
+      letter = 'X';
     }
+  }
 
-    public void printScore() {
-        System.out.println(this.name + "Wins: " + this.gamesWon);
-        System.out.println(this.name + "Wins: " + this.gamesWon);
-        System.out.println("Games Tied: " + gamesTied);
-    }
+  /**
+   * Welcomes and tells the player their assigned letter
+   */
+  public void assignLetter() {
+    System.out.println("Welcome " + name + "! You are playing as: " + letter);
+  }
 
-
-    public void switchTurn() {
-        if(turn) {
-            turn=false;
-        }
-        else {
-            turn=true;
-        }
-    }
-
-    public void switchLetter() {
-        if(letter=='X') {
-            letter='O';
-        }
-        else {
-            letter='X';
-        }
-    }
-
-    public void assignLetter() {
-        System.out.println("Welcome " + name + "! You are playing as: " + letter);
-    }
-
-    public static void main(String[] args) {
-
-        Player player1 = new Player(" ", 'C');
-        Player player2 = new Player(" ", 'C');
-    }
-    
+  public static void main(String[] args) {}
 }
