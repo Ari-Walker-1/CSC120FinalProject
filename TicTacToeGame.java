@@ -4,11 +4,20 @@ public class TicTacToeGame {
 
   char board[][];
 
+  /**
+   * TicTacToeGame Constructor
+   */
   public TicTacToeGame() {
     board = new char[3][3];
     this.printBoard();
   }
 
+  /**
+   * Method that identifies if a spot on the board is full
+   * @param row
+   * @param col
+   * @return a boolean value for if the spot is full
+   */
   public boolean spotFull(int row, int col) {
     if (this.board[row][col] == 'X') {
       return true;
@@ -19,6 +28,10 @@ public class TicTacToeGame {
     return false;
   }
 
+  /**
+   * Method that ends the game if a player has either won or both players have tied
+   * @return a boolean value for if the game is over
+   */
   public boolean gameOver() {
 
     // checks horizontal wins, makes sure all 3 are the same and not null
@@ -60,6 +73,10 @@ public class TicTacToeGame {
     return false;
   }
 
+  /**
+   * Method that tells if all the spots on the board have been used
+   * @return a boolean value for if the board is full
+   */
   public boolean boardFull() {
     // looks through each element in board. It it's not full, then board isn't full. Otherwise, it is.
     for (int i = 0; i < this.board.length; i++) {
@@ -72,10 +89,19 @@ public class TicTacToeGame {
     return true;
   }
 
+  /**
+   * Method that places a player's letter in a spot on the board based on the parameters later assigned in main
+   * @param row
+   * @param col
+   * @param i
+   */
   public void placeSpot(int row, int col, char i) {
     this.board[row][col] = i;
   }
 
+  /**
+   * Method that prints/creates an empty board
+   */
   public void printBoard() {
     System.out.println();
 
