@@ -3,6 +3,7 @@ import java.util.Scanner;
 public class TicTacToeGame {
 
   char board[][];
+  Scanner scan = new Scanner(System.in);
 
   /**
    * TicTacToeGame Constructor
@@ -37,7 +38,6 @@ public class TicTacToeGame {
     // checks horizontal wins, makes sure all 3 are the same and not null
     if (this.board[0][0] == this.board[0][1] && this.board[0][0] == this.board[0][2] && this.spotFull(0, 0)) {
       return true;
-      //System.out.println("Congradulations on the win, " + firstPlayer.name + "!"); 
     }
     if (this.board[1][0] == this.board[1][1] && this.board[1][0] == this.board[1][2] && this.spotFull(1, 0)) {
       return true;
@@ -65,10 +65,6 @@ public class TicTacToeGame {
       return true;
     }
 
-    //checks for tie
-    if (this.boardFull()) {
-      return true;
-    }
     // all the win cases have been checked, therefore no one has won
     return false;
   }
@@ -100,6 +96,77 @@ public class TicTacToeGame {
   }
 
   /**
+   * prints the player's scores at the end of the round
+   * @param firstPlayer
+   * @param secondPlayer
+   */
+  public void printScore(Player firstPlayer, Player secondPlayer) {
+    if (firstPlayer.turn) {
+      secondPlayer.gamesWon++;
+      System.out.println("Congratulations on the win, " + secondPlayer.name + "!");
+    } else {
+      firstPlayer.gamesWon++;
+      System.out.println("Congratulations on the win, " + firstPlayer.name + "!");
+    }
+  }
+
+  /**
+   * Method that lets the player input a move
+   * @param p
+   */
+  public void turn(Player p) {
+    boolean acceptableInput = false;
+
+    // keeps going until a valid input has been given
+    while (!acceptableInput) {
+
+      boolean acceptableRow = false;
+      boolean acceptableCol = false;
+
+      int moveRow = -1;
+      int moveCol = -1;
+
+      while (!acceptableRow) {
+        System.out.println("What row do you want your move to be placed in (1-3), " + p.name + "?");
+        try {
+          moveRow = Integer.parseInt(scan.nextLine()) - 1;
+          acceptableRow = true;
+
+          if (moveRow > 2 || moveRow < 0) {
+            acceptableRow = false;
+            System.out.println("Your input was not between 1 and 3. Please try again.");
+          }
+        } catch (Exception e) {
+          System.out.println("You did not enter an integer value, please try again.");
+        }
+      }
+
+      while (!acceptableCol) {
+        System.out.println("What column do you want your move to be placed in (1-3)?");
+        try {
+          moveCol = Integer.parseInt(scan.nextLine()) - 1;
+          acceptableCol = true;
+
+          if (moveCol > 2 || moveCol < 0) {
+            acceptableCol = false;
+            System.out.println("Your input was not between 1 and 3. Please try again.");
+          }
+        } catch (Exception e) {
+          System.out.println("You did not enter an integer value, please try again.");
+        }
+      }
+
+      // checks to make sure no one has placed something in that spot yet. If it has, it loops. If not, it places the move and exits the loop.
+      if (this.spotFull(moveRow, moveCol)) {
+        System.out.println("This spot is full. Please input an empty spot.");
+      } else {
+        acceptableInput = true;
+        this.placeSpot(moveRow, moveCol, p.letter);
+      }
+    }
+  }
+
+  /**
    * Method that prints/creates an empty board
    */
   public void printBoard() {
@@ -126,6 +193,7 @@ public class TicTacToeGame {
 
   public static void main(String[] args) {
     // Getting user input for the players and creating instances of them
+
     Scanner scan = new Scanner(System.in);
 
     System.out.println("Player #1, what is your name?");
@@ -156,63 +224,26 @@ public class TicTacToeGame {
         secondPlayer.turn = true;
       }
 
-      while (!game.gameOver()) {
-        boolean acceptableInput = false;
-        // keeps going until a valid exception has been given
-        while (!acceptableInput) {
-          if (firstPlayer.turn) {
-            System.out.println("What row do you want your move to be placed in (0-2), " + firstPlayer.name + "?");
-            int moveRow = Integer.parseInt(scan.nextLine());
+      while (!game.gameOver() && !game.boardFull()) {
 
-            System.out.println("What column do you want your move to be placed in (0-2)?");
-            int moveCol = Integer.parseInt(scan.nextLine());
-
-            // checks to make sure no one has placed something in that spot yet. If it has, it loops. If not, it places the move and exits the loop.
-            if (moveRow > 2 || moveCol > 2 || moveRow < 0 || moveCol < 0) {
-              System.out.println("Your input was not between 0 and 2. Please try again.");
-            } else if (game.spotFull(moveRow, moveCol)) {
-              System.out.println("This spot is full. Please input an empty spot.");
-            } else {
-              acceptableInput = true;
-              game.placeSpot(moveRow, moveCol, firstPlayer.letter);
-            }
-          }
-          // same thing, but it's secondPlayer's turn
-          else {
-            System.out.println("What row do you want your move to be placed in (0-2)," + secondPlayer.name + "?");
-            int moveRow = Integer.parseInt(scan.nextLine());
-
-            System.out.println("What column do you want your move to be placed in (0-2)?");
-            int moveCol = Integer.parseInt(scan.nextLine());
-
-            // checks to make sure no one has placed something in that spot yet. If it has, it loops. If not, it places the move and exits the loop.
-            if (moveRow > 2 || moveCol > 2 || moveRow < 0 || moveCol < 0) {
-              System.out.println("Your input was not between 0 and 2. Please try again.");
-            } else if (game.spotFull(moveRow, moveCol)) {
-              System.out.println("This spot is full. Please input an empty spot.");
-            } else {
-              acceptableInput = true;
-              game.placeSpot(moveRow, moveCol, secondPlayer.letter);
-            }
-          }
+        if (firstPlayer.turn) {
+          game.turn(firstPlayer);
+        } else {
+          game.turn(secondPlayer);
         }
         firstPlayer.switchTurn();
         secondPlayer.switchTurn();
         game.printBoard();
       }
 
+      if (game.gameOver()) {
+        game.printScore(firstPlayer, secondPlayer);
+      }
+
       if (game.boardFull()) {
         System.out.println("It's a tie.");
         firstPlayer.gamesTied++;
         secondPlayer.gamesTied++;
-      } else if (game.gameOver()) {
-        if (firstPlayer.turn) {
-          secondPlayer.gamesWon++;
-          System.out.println("Congratulations on the win, " + secondPlayer.name + "!");
-        } else {
-          firstPlayer.gamesWon++;
-          System.out.println("Congratulations on the win, " + firstPlayer.name + "!");
-        }
       }
 
       firstPlayer.switchLetter();
@@ -220,15 +251,14 @@ public class TicTacToeGame {
     }
 
     if (firstPlayer.gamesWon > secondPlayer.gamesWon) {
-      System.out.println("Player " + firstPlayer.name + " won most games overall, with " + firstPlayer.gamesWon + " total wins.");
+      System.out.println(firstPlayer.name + " won most games overall, with " + firstPlayer.gamesWon + " total wins.");
       System.out.println("Better luck next time, " + secondPlayer.name + "! You weren't far behind with " + secondPlayer.gamesWon + " wins.");
     } else if (firstPlayer.gamesWon < secondPlayer.gamesWon) {
-      System.out.println("Player " + secondPlayer.name + " won most games overall, with " + secondPlayer.gamesWon + " total wins.");
+      System.out.println(secondPlayer.name + " won most games overall, with " + secondPlayer.gamesWon + " total wins.");
       System.out.println("Better luck next time, " + firstPlayer.name + "! You weren't far behind with " + firstPlayer.gamesWon + " wins.");
     } else {
       System.out.println("Both " + firstPlayer.name + " and " + secondPlayer.name + " tied with " + firstPlayer.gamesWon + " wins!");
     }
-
     scan.close();
   }
 }
