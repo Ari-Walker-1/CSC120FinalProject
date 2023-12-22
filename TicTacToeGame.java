@@ -175,7 +175,7 @@ public class TicTacToeGame {
     for (int i = 0; i < this.board.length; i++) {
       for (int j = 0; j < this.board[i].length; j++) {
         System.out.print(" " + board[i][j]);
-        // if the element is a space, an extra space is added to stay consistent with space taken up by alphabetic characters
+        // if the element is empty, an extra space is added to stay consistent with space taken up by alphabetic characters
         if (!this.spotFull(i, j)) {
           System.out.print(" ");
         }
